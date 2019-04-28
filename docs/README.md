@@ -80,3 +80,20 @@ line.linestyle = "--"
 ```
 
 ![plot](line_segment_colour.png)
+
+### titles and fonts
+
+A plot with a title and custom font ("courier new" in this case):
+
+```nim
+let figure5 = newFigure()
+let x5 = toSeq(0..1000)
+let y5 = x5.map(func(k:int):float = sin(float(k) / 50.0))
+figure5.font = ("monospace", "Courier New")
+let lp5 = newLinePlot(x5, y5)
+lp5.colour = "red"
+figure5.add lp5
+figure5.add newTitle("A plot with a title (in Courier New).")
+```
+
+![plot](plot_title.png)

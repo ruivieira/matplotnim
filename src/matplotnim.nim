@@ -19,6 +19,7 @@ type
     script*: seq[string]
     latex*: bool
     plots*: seq[Plot]
+    font*: tuple[family: string, style: string]
 
 proc save*(figure: Figure, dest: string) =
   var script = newSeq[string]()
@@ -27,7 +28,8 @@ proc save*(figure: Figure, dest: string) =
   script.add "from matplotlib import rc"
   script.add "import matplotlib.pyplot as plt"
   script.add "from matplotlib.lines import Line2D"
-  # script.add "rc('font', **{'family': '#{@font.family}', 'serif': '#{@font.styles.to_s}'})"
+  if figure.font.family!="":
+    script.add "rc('font', **{'family': '" & figure.font.family & "', 'serif': '" & figure.font.style & "'})"
   let latex_str = if figure.latex: "True" else: "False"
   script.add fmt"rc('text', usetex={latex_str})"
   script.add "matplotlib.rcParams['text.latex.unicode']=True"
@@ -44,7 +46,10 @@ proc save*(figure: Figure, dest: string) =
 
   
 proc newFigure*(): Figure =
-  Figure(python: "/usr/local/bin/python3", script: newSeq[string](), latex: false)
+  Figure(python: "/usr/local/bin/python3", 
+         script: newSeq[string](), 
+         latex: false,
+         font: ("", ""))
 
 proc add*(figure: Figure, plot: Plot) =
   figure.plots.add plot
@@ -133,3 +138,10 @@ method render[A,B](this: Line[A,B]): string =
 
 proc newLine*[A,B](ps: tuple[x: A, y: B], pe: tuple[x: A, y: B]): Line[A, B] =
   Line[A,B](p0: ps, p1: pe, linestyle: "", colour: "")
+
+# Title
+type Title = ref object of Plot
+  title*: string
+method render(this: Title): string = fmt"plt.title(r'{this.title}')"
+
+proc newTitle*(title: string): Title = Title(title: title)
