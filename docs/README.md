@@ -119,3 +119,30 @@ for i in 0..6:
 ```
 
 ![plot](plot_hv_lines.png)
+
+### annotations
+
+```nim
+let figure7 = newFigure()
+figure7.latex = true
+let x7 = @[1, 2, 3, 4]
+let y7 = @[5.5, 7.6, 11.1, 6.5]
+let lp7 = newScatterPlot(x7, y7)
+figure7.add lp7
+for i in 0..2:
+    let ann7 = newAnnotation(float(x7[i]) + 0.1, y7[i] + 0.1, &"$p_{i}$")
+    figure7.add ann7
+```
+
+![plot](annotation.png)
+
+## output options
+
+### custom plot size
+
+```nim
+figure6.size = (20.0, 2.0)
+figure6.dpi = 180
+```
+
+![plot](custom_size.png)

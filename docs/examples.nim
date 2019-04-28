@@ -1,5 +1,8 @@
 import "../src/matplotnim"
 import "../../nim-science/science/Distributions"
+import sequtils
+import math
+import strformat
 
 let x = @[1, 2, 3, 4]
 let y = @[5.5, 7.6, 11.1, 6.5]
@@ -29,3 +32,61 @@ figure3.save "docs/hist_default.png"
 
 hist.bins = 200
 figure3.save "docs/hist_bins.png"
+
+let figure4 = newFigure()
+let x4 = toSeq(0..100)
+let y4 = x4.map(proc(k:int):float = float(k).pow(2.0))
+let lp4 = newLinePlot(x4, y4)
+figure4.add lp4
+let line = newLine((2, 4.0),(70, 70.0.pow(2.0)))
+figure4.add line
+figure4.save("docs/line_segment.png")
+
+lp4.colour = "black"
+line.colour = "red"
+line.linestyle = "--"
+figure4.save("docs/line_segment_colour.png")
+
+let figure5 = newFigure()
+let x5 = toSeq(0..1000)
+let y5 = x5.map(func(k:int):float = sin(float(k) / 50.0))
+figure5.font = ("monospace", "Courier New")
+let lp5 = newLinePlot(x5, y5)
+lp5.colour = "red"
+figure5.add lp5
+figure5.add newTitle("A plot with a title (in Courier New).")
+figure5.save("docs/plot_title.png")
+
+let figure6 = newFigure()
+let x6 = toSeq(0..1000)
+let y6 = x5.map(func(k:int):float = sin(float(k) / 50.0))
+let lp6 = newLinePlot(x5, y5)
+lp6.colour = "red"
+figure6.add lp6
+let hl6 = newHorizontalLine(0)
+hl6.linestyle = "--"
+hl6.colour = "black"
+figure6.add hl6
+for i in 0..6:
+    let vl6 = newVerticalLine(PI * float(i) * 50.0)
+    vl6.linestyle = "-."
+    vl6.colour = "blue"
+    figure6.add vl6
+figure6.save("docs/plot_hv_lines.png")
+
+### annotations
+let figure7 = newFigure()
+figure7.latex = true
+let x7 = @[1, 2, 3, 4]
+let y7 = @[5.5, 7.6, 11.1, 6.5]
+let lp7 = newScatterPlot(x7, y7)
+figure7.add lp7
+for i in 0..2:
+    let ann7 = newAnnotation(float(x7[i]) + 0.1, y7[i] + 0.1, &"$p_{i}$")
+    figure7.add ann7
+figure7.save("docs/annotation.png")
+
+# dpi
+figure6.size = (20.0, 2.0)
+figure6.dpi = 180
+figure6.save("docs/custom_size.png")

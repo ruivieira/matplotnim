@@ -20,6 +20,8 @@ type
     latex*: bool
     plots*: seq[Plot]
     font*: tuple[family: string, style: string]
+    dpi*: int
+    size*: tuple[w: float, h: float]
 
 proc save*(figure: Figure, dest: string) =
   var script = newSeq[string]()
@@ -33,9 +35,16 @@ proc save*(figure: Figure, dest: string) =
   let latex_str = if figure.latex: "True" else: "False"
   script.add fmt"rc('text', usetex={latex_str})"
   script.add "matplotlib.rcParams['text.latex.unicode']=True"
+  if figure.size.w > 0.0:
+    script.add &"fig = plt.figure(figsize=({figure.size.w},{figure.size.h}))"
+  else:
+    script.add "fig = plt.figure()"
   for p in figure.plots:
     script.add p.render
-  script.add fmt"plt.savefig('{dest}', format='png', transparent=False)"
+  if figure.dpi > 0:
+    script.add fmt"plt.savefig('{dest}', format='png', transparent=False, dpi={figure.dpi})"
+  else:
+    script.add fmt"plt.savefig('{dest}', format='png', transparent=False)"
   let script_str = script.join("\n")
   # get the temporary file
   var (file, name) = mkstemp(suffix = ".py")
@@ -49,7 +58,9 @@ proc newFigure*(): Figure =
   Figure(python: "/usr/local/bin/python3", 
          script: newSeq[string](), 
          latex: false,
-         font: ("", ""))
+         font: ("", ""),
+         dpi: 0,
+         size: (0.0, 0.0))
 
 proc add*(figure: Figure, plot: Plot) =
   figure.plots.add plot
@@ -185,3 +196,22 @@ method render[A](this: VerticalLine[A]): string =
 
 proc newVerticalLine*[A](x: A): VerticalLine[A] =
   VerticalLine[A](x: x, linestyle: "", colour: "")
+
+# Annotations
+type Annotation[A,B] = ref object of Plot
+  x*: A
+  y*: B
+  text*: string
+  colour*: string
+method render[A,B](this: Annotation[A,B]): string =
+  var options: seq[string] = @[]
+  if this.colour!="":
+    options.add fmt"color='{this.colour}'"
+  if len(options)>0:
+    let optstr = options.join(",")
+    return &"ax=plt.gca()\nax.annotate('{this.text}', xy=({this.x}, {this.y}), {optstr})"
+  else:
+    return &"ax=plt.gca()\nax.annotate('{this.text}', xy=({this.x}, {this.y}))"
+
+proc newAnnotation*[A,B](x: A, y: B, text: string): Annotation[A,B] =
+  Annotation[A,B](x: x, y: y, text: text, colour: "")
