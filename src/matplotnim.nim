@@ -112,4 +112,24 @@ method render[A](this: Histogram[A]): string =
 
 proc newHistogram*[A](x: seq[A]): Histogram[A] =
   Histogram[A](bins: 0,  x: x)
-    
+
+# Line segments
+type Line[A,B] = ref object of Plot
+  p0*: tuple[x: A, y: B]
+  p1*: tuple[x: A, y: B]
+  linestyle*: string
+  colour*: string
+method render[A,B](this: Line[A,B]): string =
+  var options: seq[string] = @[]
+  if this.linestyle!="":
+    options.add fmt"linestyle='{this.linestyle}'"
+  if this.colour!="":
+    options.add fmt"color='{this.colour}'"
+  if len(options)>0:
+    let optstr = options.join(",")
+    return fmt"ax = plt.gca(){'\n'}ax.add_line(Line2D([{this.p0.x},{this.p1.x}],[{this.p0.y},{this.p1.y}], {optstr}))"
+  else:
+    return fmt"ax = plt.gca(){'\n'}ax.add_line(Line2D([{this.p0.x},{this.p1.x}],[{this.p0.y},{this.p1.y}]))"
+
+proc newLine*[A,B](ps: tuple[x: A, y: B], pe: tuple[x: A, y: B]): Line[A, B] =
+  Line[A,B](p0: ps, p1: pe, linestyle: "", colour: "")

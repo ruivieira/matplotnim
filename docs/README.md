@@ -56,3 +56,27 @@ figure3.save "docs/hist_bins.png"
 ```
 
 ![plot](hist_bins.png)
+
+### line segments
+
+With default values:
+
+```nim
+let figure4 = newFigure()
+let x4 = toSeq(0..100)
+let y4 = x4.map(proc(k:int):float = float(k).pow(2.0))
+figure4.add newLinePlot(x4, y4)
+figure4.add newLine((2, 4.0),(70, 70.0.pow(2.0)))
+```
+
+![plot](line_segment.png)
+
+Customised:
+
+```nim
+lp4.colour = "black"
+line.colour = "red"
+line.linestyle = "--"
+```
+
+![plot](line_segment_colour.png)
