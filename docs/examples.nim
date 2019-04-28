@@ -1,4 +1,5 @@
 import "../src/matplotnim"
+import "../../nim-science/science/Distributions"
 
 let x = @[1, 2, 3, 4]
 let y = @[5.5, 7.6, 11.1, 6.5]
@@ -19,3 +20,12 @@ figure2.save("docs/scatterplot_default.png")
 
 sp.marker = "*"
 figure2.save("docs/marker.png")
+
+let samples = rnorm(1000, 0.0, 2.0)
+let figure3  =newFigure()
+let hist = newHistogram[float] samples
+figure3.add hist
+figure3.save "docs/hist_default.png"
+
+hist.bins = 200
+figure3.save "docs/hist_bins.png"

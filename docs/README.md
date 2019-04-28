@@ -34,3 +34,25 @@ figure2.save("docs/marker.png")
 ```
 
 ![plot](marker.png)
+
+### histograms
+
+With default values:
+
+```nim
+let samples = rnorm(1000, 0.0, 2.0)
+let figure3 = newFigure()
+let hist = newHistogram[float] samples
+figure3.add hist
+```
+
+![plot](hist_default.png)
+
+With custom number of bins:
+
+```nim
+hist.bins = 200
+figure3.save "docs/hist_bins.png"
+```
+
+![plot](hist_bins.png)

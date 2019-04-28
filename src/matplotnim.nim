@@ -94,4 +94,22 @@ method render[A,B](this: ScatterPlot[A,B]): string =
 
 proc newScatterPlot*[A,B](x: seq[A], y: seq[B]): ScatterPlot[A, B] =
   ScatterPlot[A, B](colour: "",  x: x, y: y)
+
+# Histogram
+type Histogram[A] = ref object of Plot
+  x*:seq[A]
+  bins*: int
+method render[A](this: Histogram[A]): string =
+  let xs = makeList(this.x)  
+  var options: seq[string] = @[]
+  if this.bins>0:
+    options.add fmt"bins={this.bins}"
+  if len(options)>0:
+    let optstr = options.join(",")
+    return fmt"plt.hist({xs},{optstr})"
+  else:
+    return fmt"plt.hist({xs})"
+
+proc newHistogram*[A](x: seq[A]): Histogram[A] =
+  Histogram[A](bins: 0,  x: x)
     
