@@ -1,8 +1,8 @@
 # Package
 
 version       = "0.1.0"
-author        = "Rui  Vieira"
-description   = "A Nim wrapper for Python\'s matplotlib"
+author        = "Rui Vieira"
+description   = "Nim wrapper for matplotlib"
 license       = "Apache-2.0"
 srcDir        = "src"
 
@@ -10,4 +10,4 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 0.19.4"
-require "tempfile"
+requires "tempfile"

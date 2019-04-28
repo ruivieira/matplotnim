@@ -4,6 +4,12 @@ import strformat
 import tempfile
 import os
 
+func numberToStr[T](data: seq[T]): seq[string] = data.map(proc(k:T):string = $k)
+
+func makeList[T](data: seq[T]): string = 
+  let str = numberToStr(data).join(",")
+  return fmt"[{str}]"
+
 type Plot = ref object of RootObj
 method render(this: Plot): string {.base.} = ""
 
@@ -43,14 +49,46 @@ proc newFigure*(): Figure =
 proc add*(figure: Figure, plot: Plot) =
   figure.plots.add plot
 
+# Line plots
 type LinePlot[A, B] = ref object of Plot
   linestyle*: string
+  colour*: string
   x*: seq[A]
   y*: seq[B]
 method render[A,B](this: LinePlot[A,B]): string =
-  let xs = this.x.map(proc(k:A):string = $k).join(",")
-  let ys = this.y.map(proc(k:B):string = $k).join(",")
-  return fmt"plt.plot([{xs}],[{ys}])"
+  let xs = makeList(this.x)
+  let ys = makeList(this.y)
+  var options: seq[string] = @[]
+  if this.linestyle!="":
+    options.add fmt"linestyle='{this.linestyle}'"
+  if this.colour!="":
+    options.add fmt"color='{this.colour}'"
+  if len(options)>0:
+    let optstr = options.join(",")
+    return fmt"plt.plot({xs},{ys},{optstr})"
+  else:
+    return fmt"plt.plot({xs},{ys})"
 
 proc newLinePlot*[A,B](x: seq[A], y: seq[B]): LinePlot[A, B] =
-  LinePlot[A, B](linestyle: "-", x: x, y: y)
+  LinePlot[A, B](linestyle: "", colour: "",  x: x, y: y)
+
+# Scatter plots
+type ScatterPlot[A,B] = ref object of Plot
+  colour*: string
+  x*: seq[A]
+  y*: seq[B]
+method render[A,B](this: ScatterPlot[A,B]): string =
+  let xs = makeList(this.x)
+  let ys = makeList(this.y)
+  var options: seq[string] = @[]
+  if this.colour!="":
+    options.add fmt"color='{this.colour}'"
+  if len(options)>0:
+    let optstr = options.join(",")
+    return fmt"plt.scatter({xs},{ys},{optstr})"
+  else:
+    return fmt"plt.scatter({xs},{ys})"
+
+proc newScatterPlot*[A,B](x: seq[A], y: seq[B]): ScatterPlot[A, B] =
+  ScatterPlot[A, B](colour: "",  x: x, y: y)
+    
