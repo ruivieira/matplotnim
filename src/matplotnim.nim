@@ -75,6 +75,7 @@ proc newLinePlot*[A,B](x: seq[A], y: seq[B]): LinePlot[A, B] =
 # Scatter plots
 type ScatterPlot[A,B] = ref object of Plot
   colour*: string
+  marker*: string
   x*: seq[A]
   y*: seq[B]
 method render[A,B](this: ScatterPlot[A,B]): string =
@@ -83,6 +84,8 @@ method render[A,B](this: ScatterPlot[A,B]): string =
   var options: seq[string] = @[]
   if this.colour!="":
     options.add fmt"color='{this.colour}'"
+  if this.marker!="":
+    options.add fmt"marker='{this.marker}'"
   if len(options)>0:
     let optstr = options.join(",")
     return fmt"plt.scatter({xs},{ys},{optstr})"

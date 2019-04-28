@@ -16,3 +16,6 @@ let sp = newScatterPlot[int,float](x, y)
 sp.colour = "green"
 figure2.add sp
 figure2.save("docs/scatterplot_default.png")
+
+sp.marker = "*"
+figure2.save("docs/marker.png")

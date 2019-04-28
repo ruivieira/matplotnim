@@ -25,3 +25,12 @@ figure2.add sp
 ```
 
 ![plot](scatterplot_default.png)
+
+Custom markers:
+
+```nim
+sp.marker = "*"
+figure2.save("docs/marker.png")
+```
+
+![plot](marker.png)
