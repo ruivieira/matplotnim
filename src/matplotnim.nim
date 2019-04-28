@@ -145,3 +145,43 @@ type Title = ref object of Plot
 method render(this: Title): string = fmt"plt.title(r'{this.title}')"
 
 proc newTitle*(title: string): Title = Title(title: title)
+
+# Horizontal line
+type HorizontalLine[A] = ref object of Plot
+  y*: A
+  linestyle*: string
+  colour*: string
+method render[A](this: HorizontalLine[A]): string =
+  var options: seq[string] = @[]
+  if this.linestyle!="":
+    options.add fmt"linestyle='{this.linestyle}'"
+  if this.colour!="":
+    options.add fmt"color='{this.colour}'"
+  if len(options)>0:
+    let optstr = options.join(",")
+    return fmt"plt.axhline(y={this.y}, {optstr})"
+  else:
+    return fmt"plt.axhline(y={this.y})"
+
+proc newHorizontalLine*[A](y: A): HorizontalLine[A] =
+  HorizontalLine[A](y: y, linestyle: "", colour: "")
+
+# Vertical line
+type VerticalLine[A] = ref object of Plot
+  x*: A
+  linestyle*: string
+  colour*: string
+method render[A](this: VerticalLine[A]): string =
+  var options: seq[string] = @[]
+  if this.linestyle!="":
+    options.add fmt"linestyle='{this.linestyle}'"
+  if this.colour!="":
+    options.add fmt"color='{this.colour}'"
+  if len(options)>0:
+    let optstr = options.join(",")
+    return fmt"plt.axvline(x={this.x}, {optstr})"
+  else:
+    return fmt"plt.axvline(x={this.x})"
+
+proc newVerticalLine*[A](x: A): VerticalLine[A] =
+  VerticalLine[A](x: x, linestyle: "", colour: "")

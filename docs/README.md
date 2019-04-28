@@ -97,3 +97,25 @@ figure5.add newTitle("A plot with a title (in Courier New).")
 ```
 
 ![plot](plot_title.png)
+
+### vertical and horizontal lines
+
+```nim
+let figure6 = newFigure()
+let x6 = toSeq(0..1000)
+let y6 = x5.map(func(k:int):float = sin(float(k) / 50.0))
+let lp6 = newLinePlot(x5, y5)
+lp6.colour = "red"
+figure6.add lp6
+let hl6 = newHorizontalLine(0)
+hl6.linestyle = "--"
+hl6.colour = "black"
+figure6.add hl6
+for i in 0..6:
+    let vl6 = newVerticalLine(PI * float(i) * 50.0)
+    vl6.linestyle = "-."
+    vl6.colour = "blue"
+    figure6.add vl6
+```
+
+![plot](plot_hv_lines.png)
