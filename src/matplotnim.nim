@@ -18,10 +18,12 @@ type
     python*: string
     script*: seq[string]
     latex*: bool
-    plots*: seq[Plot]
+    plots*: seq[seq[Plot]]
     font*: tuple[family: string, style: string]
     dpi*: int
     size*: tuple[w: float, h: float]
+    grid*: tuple[rows: int, cols: int]
+    index: int
 
 proc save*(figure: Figure, dest: string) =
   var script = newSeq[string]()
@@ -39,8 +41,15 @@ proc save*(figure: Figure, dest: string) =
     script.add &"fig = plt.figure(figsize=({figure.size.w},{figure.size.h}))"
   else:
     script.add "fig = plt.figure()"
-  for p in figure.plots:
-    script.add p.render
+  for i in 0..<len(figure.plots):
+    echo &"i = {i}"
+    echo &"plt.subplot({figure.grid.rows}, {figure.grid.cols}, {i+1})"
+    script.add &"plt.subplot({figure.grid.rows}, {figure.grid.cols}, {i+1})"
+    let plots = figure.plots[i]
+    echo &"#plots = {len(plots)}"
+    for j in 0..<len(plots):
+      echo &"j = {j}"
+      script.add plots[j].render
   if figure.dpi > 0:
     script.add fmt"plt.savefig('{dest}', format='png', transparent=False, dpi={figure.dpi})"
   else:
@@ -51,8 +60,6 @@ proc save*(figure: Figure, dest: string) =
   writeFile(name, script_str)
   echo name
   discard execShellCmd fmt"/usr/local/bin/python3 {name}"
-
-
   
 proc newFigure*(): Figure =
   Figure(python: "/usr/local/bin/python3", 
@@ -60,11 +67,21 @@ proc newFigure*(): Figure =
          latex: false,
          font: ("", ""),
          dpi: 0,
-         size: (0.0, 0.0))
+         size: (0.0, 0.0),
+         grid: (1, 1),
+         index: 0,
+         plots: @[])
 
 proc add*(figure: Figure, plot: Plot) =
-  figure.plots.add plot
+  if len(figure.plots)==0:
+    figure.plots.add @[]
+  echo &"Add plot to {figure.index}"
+  figure.plots[figure.index].add plot
 
+proc subplot*(figure: Figure) =
+  figure.plots.add @[]
+  figure.index += 1
+  
 # Line plots
 type LinePlot[A, B] = ref object of Plot
   linestyle*: string

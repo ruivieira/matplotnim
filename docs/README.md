@@ -146,3 +146,22 @@ figure6.dpi = 180
 ```
 
 ![plot](custom_size.png)
+
+### side-by-side plots
+
+```nim
+let figure8 = newFigure()
+figure8.grid = (rows: 1, cols: 2)
+figure8.size = (8.0, 4.0)
+figure8.add newLinePlot[int,float](x, y)
+figure8.subplot
+figure8.add lp6
+figure8.add hl6
+for i in 0..6:
+    let vl6 = newVerticalLine(PI * float(i) * 50.0)
+    vl6.linestyle = "-."
+    vl6.colour = "blue"
+    figure8.add vl6
+```
+
+![plot](side_by_side.png)
