@@ -165,3 +165,21 @@ for i in 0..6:
 ```
 
 ![plot](side_by_side.png)
+
+### simple grid
+
+```nim
+let figure9 = newFigure()
+figure9.size = (8.0, 4.0)
+figure9.grid = (3, 3)
+let x9 = toSeq(0..<300)
+for n in 0..<9:
+    if n > 0:
+        figure9.subplot
+    let fn = proc(d:int):float= sin(float(n)*float(d))
+    let lp = newLinePlot(x9, x9.map(fn))
+    lp.colour = "red"
+    figure9.add lp
+```
+
+![plot](grid.png)

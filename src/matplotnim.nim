@@ -152,7 +152,7 @@ type Line[A,B] = ref object of Plot
   p1*: tuple[x: A, y: B]
   linestyle*: string
   colour*: string
-method render[A,B](this: Line[A,B]): string =
+method render[A,B](this: Line[A,B]): string {.locks: 0.} =
   var options: seq[string] = @[]
   if this.linestyle!="":
     options.add fmt"linestyle='{this.linestyle}'"
@@ -179,7 +179,7 @@ type HorizontalLine[A] = ref object of Plot
   y*: A
   linestyle*: string
   colour*: string
-method render[A](this: HorizontalLine[A]): string =
+method render[A](this: HorizontalLine[A]): string {.locks: 0.} =
   var options: seq[string] = @[]
   if this.linestyle!="":
     options.add fmt"linestyle='{this.linestyle}'"

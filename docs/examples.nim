@@ -95,7 +95,7 @@ figure6.save("docs/custom_size.png")
 let figure8 = newFigure()
 figure8.grid = (rows: 1, cols: 2)
 figure8.size = (8.0, 4.0)
-figure8.add newLinePlot[int,float](x, y)
+figure8.add newLinePlot(x, y)
 figure8.subplot
 figure8.add lp6
 figure8.add hl6
@@ -105,3 +105,17 @@ for i in 0..6:
     vl6.colour = "blue"
     figure8.add vl6
 figure8.save("docs/side_by_side.png")
+
+# simple grid
+let figure9 = newFigure()
+figure9.size = (8.0, 4.0)
+figure9.grid = (3, 3)
+let x9 = toSeq(0..<300)
+for n in 0..<9:
+    if n > 0:
+        figure9.subplot
+    let fn = proc(d:int):float= sin(float(n)*float(d))
+    let lp = newLinePlot(x9, x9.map(fn))
+    lp.colour = "red"
+    figure9.add lp
+figure9.save("docs/grid.png")
