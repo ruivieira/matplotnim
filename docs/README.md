@@ -9,7 +9,7 @@ let figure = newFigure()
 figure.add newLinePlot[int,float](@[1, 2, 3, 4], @[5.5, 7.6, 11.1, 6.5])
 ```
 
-![plot](lineplot_default.png)
+![](lineplot_default.png)
 
 ### line, scatter with options
 
@@ -24,7 +24,7 @@ sp.colour = "green"
 figure2.add sp
 ```
 
-![plot](scatterplot_default.png)
+![](scatterplot_default.png)
 
 Custom markers:
 
@@ -33,7 +33,7 @@ sp.marker = "*"
 figure2.save("docs/marker.png")
 ```
 
-![plot](marker.png)
+![](marker.png)
 
 ### histograms
 
@@ -46,7 +46,7 @@ let hist = newHistogram[float] samples
 figure3.add hist
 ```
 
-![plot](hist_default.png)
+![](hist_default.png)
 
 With custom number of bins:
 
@@ -55,7 +55,7 @@ hist.bins = 200
 figure3.save "docs/hist_bins.png"
 ```
 
-![plot](hist_bins.png)
+![](hist_bins.png)
 
 ### line segments
 
@@ -69,7 +69,7 @@ figure4.add newLinePlot(x4, y4)
 figure4.add newLine((2, 4.0),(70, 70.0.pow(2.0)))
 ```
 
-![plot](line_segment.png)
+![](line_segment.png)
 
 Customised:
 
@@ -79,7 +79,7 @@ line.colour = "red"
 line.linestyle = "--"
 ```
 
-![plot](line_segment_colour.png)
+![](line_segment_colour.png)
 
 ### titles and fonts
 
@@ -96,7 +96,7 @@ figure5.add lp5
 figure5.add newTitle("A plot with a title (in Courier New).")
 ```
 
-![plot](plot_title.png)
+![](plot_title.png)
 
 ### vertical and horizontal lines
 
@@ -118,7 +118,7 @@ for i in 0..6:
     figure6.add vl6
 ```
 
-![plot](plot_hv_lines.png)
+![](plot_hv_lines.png)
 
 ### annotations
 
@@ -134,7 +134,7 @@ for i in 0..2:
     figure7.add ann7
 ```
 
-![plot](annotation.png)
+![](annotation.png)
 
 ## output options
 
@@ -145,7 +145,7 @@ figure6.size = (20.0, 2.0)
 figure6.dpi = 180
 ```
 
-![plot](custom_size.png)
+![](custom_size.png)
 
 ### side-by-side plots
 
@@ -164,7 +164,7 @@ for i in 0..6:
     figure8.add vl6
 ```
 
-![plot](side_by_side.png)
+![](side_by_side.png)
 
 ### simple grid
 
@@ -182,7 +182,7 @@ for n in 0..<9:
     figure9.add lp
 ```
 
-![plot](grid.png)
+![](grid.png)
 
 ### horizontal and vertical limits
 
@@ -201,4 +201,4 @@ figure10.add sp10
 figure10.save("docs/limits.png")
 ```
 
-![plot](limits.png)
+![](limits.png)

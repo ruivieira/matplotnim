@@ -1,0 +1,129 @@
+<h1 id="examples">examples</h1>
+<h2 id="plot-types">plot types</h2>
+<h3 id="line-scatter-with-defaults">line, scatter with defaults</h3>
+<pre class="nim"><code>let figure = newFigure()
+figure.add newLinePlot[int,float](@[1, 2, 3, 4], @[5.5, 7.6, 11.1, 6.5])</code></pre>
+<p><img src="lineplot_default.png" /></p>
+<h3 id="line-scatter-with-options">line, scatter with options</h3>
+<pre class="nim"><code>let figure2 = newFigure()
+let lp = newLinePlot[int,float](x, y)
+lp.linestyle = &quot;--&quot;
+lp.colour = &quot;red&quot;
+figure2.add lp
+let sp = newScatterPlot[int,float](x, y)
+sp.colour = &quot;green&quot;
+figure2.add sp</code></pre>
+<p><img src="scatterplot_default.png" /></p>
+<p>Custom markers:</p>
+<pre class="nim"><code>sp.marker = &quot;*&quot;
+figure2.save(&quot;docs/marker.png&quot;)</code></pre>
+<p><img src="marker.png" /></p>
+<h3 id="histograms">histograms</h3>
+<p>With default values:</p>
+<pre class="nim"><code>let samples = rnorm(1000, 0.0, 2.0)
+let figure3 = newFigure()
+let hist = newHistogram[float] samples
+figure3.add hist</code></pre>
+<p><img src="hist_default.png" /></p>
+<p>With custom number of bins:</p>
+<pre class="nim"><code>hist.bins = 200
+figure3.save &quot;docs/hist_bins.png&quot;</code></pre>
+<p><img src="hist_bins.png" /></p>
+<h3 id="line-segments">line segments</h3>
+<p>With default values:</p>
+<pre class="nim"><code>let figure4 = newFigure()
+let x4 = toSeq(0..100)
+let y4 = x4.map(proc(k:int):float = float(k).pow(2.0))
+figure4.add newLinePlot(x4, y4)
+figure4.add newLine((2, 4.0),(70, 70.0.pow(2.0)))</code></pre>
+<p><img src="line_segment.png" /></p>
+<p>Customised:</p>
+<pre class="nim"><code>lp4.colour = &quot;black&quot;
+line.colour = &quot;red&quot;
+line.linestyle = &quot;--&quot;</code></pre>
+<p><img src="line_segment_colour.png" /></p>
+<h3 id="titles-and-fonts">titles and fonts</h3>
+<p>A plot with a title and custom font (“courier new” in this case):</p>
+<pre class="nim"><code>let figure5 = newFigure()
+let x5 = toSeq(0..1000)
+let y5 = x5.map(func(k:int):float = sin(float(k) / 50.0))
+figure5.font = (&quot;monospace&quot;, &quot;Courier New&quot;)
+let lp5 = newLinePlot(x5, y5)
+lp5.colour = &quot;red&quot;
+figure5.add lp5
+figure5.add newTitle(&quot;A plot with a title (in Courier New).&quot;)</code></pre>
+<p><img src="plot_title.png" /></p>
+<h3 id="vertical-and-horizontal-lines">vertical and horizontal lines</h3>
+<pre class="nim"><code>let figure6 = newFigure()
+let x6 = toSeq(0..1000)
+let y6 = x5.map(func(k:int):float = sin(float(k) / 50.0))
+let lp6 = newLinePlot(x5, y5)
+lp6.colour = &quot;red&quot;
+figure6.add lp6
+let hl6 = newHorizontalLine(0)
+hl6.linestyle = &quot;--&quot;
+hl6.colour = &quot;black&quot;
+figure6.add hl6
+for i in 0..6:
+    let vl6 = newVerticalLine(PI * float(i) * 50.0)
+    vl6.linestyle = &quot;-.&quot;
+    vl6.colour = &quot;blue&quot;
+    figure6.add vl6</code></pre>
+<p><img src="plot_hv_lines.png" /></p>
+<h3 id="annotations">annotations</h3>
+<pre class="nim"><code>let figure7 = newFigure()
+figure7.latex = true
+let x7 = @[1, 2, 3, 4]
+let y7 = @[5.5, 7.6, 11.1, 6.5]
+let lp7 = newScatterPlot(x7, y7)
+figure7.add lp7
+for i in 0..2:
+    let ann7 = newAnnotation(float(x7[i]) + 0.1, y7[i] + 0.1, &amp;&quot;$p_{i}$&quot;)
+    figure7.add ann7</code></pre>
+<p><img src="annotation.png" /></p>
+<h2 id="output-options">output options</h2>
+<h3 id="custom-plot-size">custom plot size</h3>
+<pre class="nim"><code>figure6.size = (20.0, 2.0)
+figure6.dpi = 180</code></pre>
+<p><img src="custom_size.png" /></p>
+<h3 id="side-by-side-plots">side-by-side plots</h3>
+<pre class="nim"><code>let figure8 = newFigure()
+figure8.grid = (rows: 1, cols: 2)
+figure8.size = (8.0, 4.0)
+figure8.add newLinePlot[int,float](x, y)
+figure8.subplot
+figure8.add lp6
+figure8.add hl6
+for i in 0..6:
+    let vl6 = newVerticalLine(PI * float(i) * 50.0)
+    vl6.linestyle = &quot;-.&quot;
+    vl6.colour = &quot;blue&quot;
+    figure8.add vl6</code></pre>
+<p><img src="side_by_side.png" /></p>
+<h3 id="simple-grid">simple grid</h3>
+<pre class="nim"><code>let figure9 = newFigure()
+figure9.size = (8.0, 4.0)
+figure9.grid = (3, 3)
+let x9 = toSeq(0..&lt;300)
+for n in 0..&lt;9:
+    if n &gt; 0:
+        figure9.subplot
+    let fn = proc(d:int):float= sin(float(n)*float(d))
+    let lp = newLinePlot(x9, x9.map(fn))
+    lp.colour = &quot;red&quot;
+    figure9.add lp</code></pre>
+<p><img src="grid.png" /></p>
+<h3 id="horizontal-and-vertical-limits">horizontal and vertical limits</h3>
+<pre class="nim"><code>let x10 = rnorm(1000, 0.0, 2.0)
+let y10 = rnorm(1000, 0.0, 2.0)
+let figure10 = newFigure()
+figure10.size = (8.0, 4.0)
+figure10.grid = (1, 2)
+let sp10 = newScatterPlot(x10, y10)
+figure10.add newXLimit(0.0, 1.0)
+figure10.add sp10
+figure10.subplot
+figure10.add newYLimit(-1.0, 0.0)
+figure10.add sp10
+figure10.save(&quot;docs/limits.png&quot;)</code></pre>
+<p><img src="limits.png" /></p>
