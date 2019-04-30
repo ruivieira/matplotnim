@@ -232,3 +232,22 @@ method render[A,B](this: Annotation[A,B]): string =
 
 proc newAnnotation*[A,B](x: A, y: B, text: string): Annotation[A,B] =
   Annotation[A,B](x: x, y: y, text: text, colour: "")
+
+# Limits
+type XLimit[A] = ref object of Plot
+  min: A
+  max: A
+method render[A](this: XLimit[A]): string =
+  return &"ax=plt.gca()\nax.set_xlim([{this.min},{this.max}])"
+
+proc newXLimit*[A](min: A, max: A): XLimit[A] = 
+  XLimit[A](min: min, max: max)
+
+type YLimit[A] = ref object of Plot
+  min: A
+  max: A
+method render[A](this: YLimit[A]): string =
+  return &"ax=plt.gca()\nax.set_ylim([{this.min},{this.max}])"
+
+proc newYLimit*[A](min: A, max: A): YLimit[A] = 
+  YLimit[A](min: min, max: max)

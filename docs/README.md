@@ -183,3 +183,22 @@ for n in 0..<9:
 ```
 
 ![plot](grid.png)
+
+### horizontal and vertical limits
+
+```nim
+let x10 = rnorm(1000, 0.0, 2.0)
+let y10 = rnorm(1000, 0.0, 2.0)
+let figure10 = newFigure()
+figure10.size = (8.0, 4.0)
+figure10.grid = (1, 2)
+let sp10 = newScatterPlot(x10, y10)
+figure10.add newXLimit(0.0, 1.0)
+figure10.add sp10
+figure10.subplot
+figure10.add newYLimit(-1.0, 0.0)
+figure10.add sp10
+figure10.save("docs/limits.png")
+```
+
+![plot](limits.png)
