@@ -57,6 +57,19 @@ figure3.save "docs/hist_bins.png"
 
 ![](hist_bins.png)
 
+You can also create KDE density plots.
+For instance:
+
+```nim
+let x = rnorm(1000, 0.0, 2.0)
+let figure = newFigure()
+let dp = newDensity(x)
+figure.add dp
+figure.save("docs/density.png")
+```
+
+![](density1.png)
+
 ### line segments
 
 With default values:

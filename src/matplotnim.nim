@@ -57,6 +57,7 @@ proc save*(figure: Figure, dest: string) =
   let script_str = script.join("\n")
   # get the temporary file
   var (file, name) = mkstemp(suffix = ".py")
+  echo name
   writeFile(name, script_str)
   echo name
   discard execShellCmd fmt"/usr/local/bin/python3 {name}"
@@ -145,6 +146,32 @@ method render[A](this: Histogram[A]): string =
 
 proc newHistogram*[A](x: seq[A]): Histogram[A] =
   Histogram[A](bins: 0,  x: x)
+
+type Density[A] = ref object of Plot
+  x*:seq[A]
+  steps*: int
+method render[A](this: Density[A]): string =
+  let xs = makeList(this.x)
+
+  var s: seq[string] = @[]
+  s.add("from scipy import stats")
+  s.add("import numpy as np")
+  s.add(fmt"_data = {xs}")
+  let x_max = foldr(this.x, max(a, b))
+  let x_min = foldr(this.x, min(a, b))
+  
+  let steps = abs(x_max - x_min) / float(this.steps)
+  s.add("_density = stats.kde.gaussian_kde(_data)")
+  echo fmt"x_max = {x_max}, x_min = {x_min}, steps = {steps}"
+  s.add(fmt"_x = np.arange({x_min}, {x_max}, {steps})")
+
+  s.add("plt.plot(_x, _density(_x))")
+
+  return s.join("\n")
+
+proc newDensity*[A](x: seq[A]): Density[A] =
+  Density[A](steps: 100,  x: x)
+  
 
 # Line segments
 type Line[A,B] = ref object of Plot
