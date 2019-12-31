@@ -60,10 +60,10 @@ proc save*(figure: Figure, dest: string) =
   echo name
   writeFile(name, script_str)
   echo name
-  discard execShellCmd fmt"/usr/local/bin/python3 {name}"
+  discard execShellCmd figure.python & " " & name
   
-proc newFigure*(): Figure =
-  Figure(python: "/usr/local/bin/python3", 
+proc newFigure*(python = "/usr/local/bin/python3"): Figure =
+  Figure(python: python, 
          script: newSeq[string](), 
          latex: false,
          font: ("", ""),
