@@ -1,0 +1,18 @@
+image: ubuntu/latest
+packages:
+  - curl
+  - unzip
+sources:
+  - https://git.sr.ht/~ruivieira/matplotnim
+tasks:
+  - setup: |
+      sudo apt-get update
+      sudo apt-get install -y curl gcc
+      export CHOOSENIM_NO_ANALYTICS=1
+      curl https://nim-lang.org/choosenim/init.sh -sSf | sh -s -- -y
+      /home/build/.nimble/bin/choosenim stable
+  - test: |
+      export PATH=$HOME/.nimble/bin:$PATH
+      cd matplotnim
+      nim --version
+      nimble test
